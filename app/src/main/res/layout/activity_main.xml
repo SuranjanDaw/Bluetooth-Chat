@@ -29,6 +29,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/discoveredDevices"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Enter the time you want to make it discoverable in Seconds"
+                android:id="@+id/time"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sample Text"
+                android:id="@+id/sample"/>
         </LinearLayout>
     </ScrollView>
     <Button
@@ -46,5 +56,15 @@
         android:layout_height="wrap_content"
         android:text="Discover Devices"
         android:onClick="startDiscovery1"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make discoverable"
+        android:onClick="makeDiscover" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect"
+        android:onClick="connectToOtherDevice"/>
 
 </LinearLayout>
