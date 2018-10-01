@@ -3,6 +3,7 @@ package com.example.suranjan.mybluetooth;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView text2;
     private TextView sample;
     private static final int REQUEST_ENABLE_BT = 1;
+    private BluetoothDevice btdevice;
+    BluetoothSocket btScocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
-    public void sendData(View view) {
+    public void switchOn(View view) {
 
         if (mBluetoothAdapter == null)
             Toast.makeText(this, "Device does not support Bluetooth!!!", Toast.LENGTH_SHORT).show();
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        BluetoothDevice device;
         @Override
         public void onReceive(Context context, Intent intent) {
             StringBuilder deviceName = new StringBuilder("");
@@ -89,13 +93,14 @@ public class MainActivity extends AppCompatActivity {
             String action = intent.getAction();
             Log.d("aa", "hello");
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 deviceName.append(device.getName()).append("\n");
                 deviceMACAdress.append(device.getAddress()).append("\n");
                 Log.d("aa", deviceName.toString() + "++" + deviceMACAdress.toString());
             }
             String devicesDetails = "Device name is:" + deviceName.toString() + "\nMAC ADDRESS:" + deviceMACAdress.toString();
             text2.setText(devicesDetails);
+            btdevice = device;
         }
     };
 
@@ -141,10 +146,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void connectToOtherDevice(View view) {
-        sample = findViewById(R.id.sample);
+    public void connectAsServer(View view) {
+        sample = findViewById(R.id.readMessage);
         AcceptThread acceptThread = new AcceptThread();
         acceptThread.start();
+        try {
+            acceptThread.join();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(!acceptThread.isAlive())
+        {
+            btScocket = acceptThread.manageMyConnectedSocket();
+            String s = "Bluetooth Connected to "+btdevice.getName();
+            sample.setText(s);
+        }
+
+    }
+
+    public void connectAsClient(View view) {
+        ConnectThread connectThread = new ConnectThread(btdevice);
+        connectThread.start();
+
+    }
+
+    public void getMessage(View view) {
+    }
+
+    public void sendMessage(View view) {
+        EditText editMessage = findViewById(R.id.sendmessage);
+        String s = editMessage.getText().toString();
+        MyBlutoothService myBlutoothService = new MyBlutoothService();
+        if(btScocket.isConnected())
+        {
+            MyBlutoothService.ConnectedThread connectThread = myBlutoothService.new ConnectedThread(btScocket);
+            connectThread.start();
+        }
+
     }
 }
 

@@ -34,37 +34,57 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter the time you want to make it discoverable in Seconds"
                 android:id="@+id/time"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Switch On Bluetooth"
+                android:onClick="switchOn"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show List"
+                android:onClick="showList"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Discover Devices"
+                android:onClick="startDiscovery1"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Make discoverable"
+                android:onClick="makeDiscover" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connect As Server"
+                android:onClick="connectAsServer"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connect as Client"
+                android:onClick="connectAsClient"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type your Message"
+                android:id="@+id/sendmessage"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Message"
+                android:onClick="sendMessage"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sample Text"
-                android:id="@+id/sample"/>
+                android:id="@+id/readMessage"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Message"
+                android:onClick="getMessage"/>
         </LinearLayout>
     </ScrollView>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="send"
-        android:onClick="sendData"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show List"
-        android:onClick="showList"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Discover Devices"
-        android:onClick="startDiscovery1"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Make discoverable"
-        android:onClick="makeDiscover" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Connect"
-        android:onClick="connectToOtherDevice"/>
-
 </LinearLayout>

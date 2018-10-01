@@ -12,6 +12,7 @@ import java.util.UUID;
 
 class AcceptThread extends Thread {
     private final BluetoothServerSocket mmServerSocket;
+    BluetoothSocket socket;
     private TextView t;
     private static  final String NAME ="abc";
     public AcceptThread() {
@@ -28,9 +29,8 @@ class AcceptThread extends Thread {
         }
         mmServerSocket = tmp;
     }
-
     public void run() {
-        BluetoothSocket socket = null;
+        //BluetoothSocket socket;
         Log.d("aa", "in run()");
         while (true) {
             Log.d("aa", "in while()");
@@ -46,6 +46,7 @@ class AcceptThread extends Thread {
             if (socket != null) {
 
                 Log.d("aa","Connected");
+                //manageMyConnectedSocket(socket);
 
                 try {
                     mmServerSocket.close();
@@ -67,10 +68,12 @@ class AcceptThread extends Thread {
             Log.d("aa", "Could not close the connect socket");
         }
     }
-    /*private void manageMyConnectedSocket(BluetoothSocket mmSocket) {
+    public BluetoothSocket manageMyConnectedSocket() {
+        /*MyBlutoothService myBlutoothService = new MyBlutoothService();
         if (mmSocket.isConnected()) {
-            ConnectedThread mConnectedThread = new ConnectedThread(mmSocket);
+            MyBlutoothService.ConnectedThread mConnectedThread = myBlutoothService.new ConnectedThread(mmSocket);
             mConnectedThread.start();
-        }
-    }*/
+        }*/
+        return  socket;
+    }
 }
