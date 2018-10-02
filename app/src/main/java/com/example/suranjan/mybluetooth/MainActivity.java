@@ -33,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView sample;
     private static final int REQUEST_ENABLE_BT = 1;
     private BluetoothDevice btdevice;
+    private final UUID MY_UUID = UUID.fromString("34B1CF4D-1069-4AD6-89B6-E161D79BE4D9");
     BluetoothSocket btScocket;
+    MyBlutoothService myBlutoothService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         text = findViewById(R.id.pairedDevices);
         text2 = findViewById(R.id.discoveredDevices);
-
+        sample = findViewById(R.id.readMessage);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             String devicesDetails = "Device name is:" + deviceName.toString() + "\nMAC ADDRESS:" + deviceMACAdress.toString();
             text2.setText(devicesDetails);
             btdevice = device;
+            myBlutoothService = new MyBlutoothService(btdevice,MY_UUID);
         }
     };
 
@@ -128,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mReceiver);
     }
 
     public void makeDiscover(View view) {
@@ -147,10 +149,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connectAsServer(View view) {
-        sample = findViewById(R.id.readMessage);
-        AcceptThread acceptThread = new AcceptThread();
-        acceptThread.start();
-        try {
+
+        myBlutoothService.serverConnect();
+        /*try {
             acceptThread.join();
 
         } catch (InterruptedException e) {
@@ -162,28 +163,32 @@ public class MainActivity extends AppCompatActivity {
             btScocket = acceptThread.manageMyConnectedSocket();
             String s = "Bluetooth Connected to "+btdevice.getName();
             sample.setText(s);
-        }
+        }*/
 
     }
 
     public void connectAsClient(View view) {
-        ConnectThread connectThread = new ConnectThread(btdevice);
-        connectThread.start();
+        myBlutoothService.clientConnect();
 
     }
 
     public void getMessage(View view) {
+        try{
+            String message = myBlutoothService.getImcomingMessage();
+            sample.setText(message);
+        }catch (Exception e)
+        {
+            sample.setText("No Values Sent!!!");
+            Log.d("aa","Nothing Yet");
+        }
+
     }
 
     public void sendMessage(View view) {
         EditText editMessage = findViewById(R.id.sendmessage);
         String s = editMessage.getText().toString();
-        MyBlutoothService myBlutoothService = new MyBlutoothService();
-        if(btScocket.isConnected())
-        {
-            MyBlutoothService.ConnectedThread connectThread = myBlutoothService.new ConnectedThread(btScocket);
-            connectThread.start();
-        }
+        Log.d("aa","in send if");
+        myBlutoothService.write(s.getBytes());
 
     }
 }
